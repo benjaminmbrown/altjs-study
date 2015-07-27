@@ -2,9 +2,29 @@
 var alt = require('../alt');
 
 class LocationActions{
-	updatLocations(locations){
+	updateLocations(locations){
 		this.dispatch(locations);
 	}
+
+	fetchLocations(){
+		//dispatches loading state event
+		this.dispatch();
+
+		LocationsFetcher.fetch()
+			.then((locations) =>{
+				//access all other actions with this.actions
+				this.actions.updateLocations(locations);
+			})
+			.catch((errorMessage)=>{
+				this.actions.locationsFailed(errorMessage);
+			});
+
+	}
+
+	locationsFailed(errorMessage){
+		this.dispatch(errorMessage);
+	}
+
 }
 
 module.exports = alt.createActions(LocationActions);
