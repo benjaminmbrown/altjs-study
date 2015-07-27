@@ -9,6 +9,7 @@ var Locations = React.createClass({
 	//listen to changes once the stat in store is updated
 	componentDidMount(){
 		LocationStore.listen(this.onChange);
+		LocationsActions.fetchLocations();
 	},
 	//remove listener
 	compoenentWillUnmount(){
@@ -20,9 +21,16 @@ var Locations = React.createClass({
 	},
 
 	render(){
+		if(this.state.errorMessage){
+			return (<div>Somthing is fishy</div>);
+		}
+		if(!this.state.locations.length){
+			return(<div><img src="/my-cool-spinner.gif"/><div>)
+		}
+
 		return(
 			<ul>
-			{this.stat.locations.map((location) => {
+			{this.state.locations.map((location) => {
 				return (<li>{location.name}</li>);
 			})};
 			</ul>
